@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{template1}">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Ajouter reponse</title>
+    </head>
+    <div layout:fragment="content"  class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Ajouter une nouvelle reponse</div>
+            <div class="panel-body">
+                <form action="#" th:action="@{/reponses/save}" th:object="${reponseAdd}" method="post">
+                    <input type="text" th:field="*{question}" placeholder="Question" class="form-control mb-4 col-4" style="display: none"><br>
+                    <label>Contenu:</label><br>
+                    <input type="text" th:field="*{reponse}" placeholder="Reponse" class="form-control mb-4 col-4" required><br>
+                    <label>Correcte:</label>
+                    <input type="radio" name="correcte" value="true" checked="checked">
+                    <label>True</label>
+                    <input type="radio" name="correcte" value="false">
+                    <label>False</label><br><br>
+                    <button type="submit" class="btn btn-primary col-2">Ajouter</button>
+                    <a th:href="'/reponses/list?question_id='+*{question.id}" class="btn btn-danger col-2" >Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</html>

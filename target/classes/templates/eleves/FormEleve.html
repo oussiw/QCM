@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+</head>
+<body>
+<div class="container mt-5">
+	<div class="panel panel-primary">
+    	<div class="panel-heading" th:if="${Eleve.login == null}">Ajouter un élève nouvel élève</div>
+    	<div class="panel-heading" th:if="${Eleve.login}">Editer un élève</div>
+    		<div class="panel-body">
+          		<form method="post" th:action="@{/classes/saveEleve}">
+              		<div class="form-group">
+                 		<input class="form-control" type="text" name="login" th:value="${Eleve.login}" th:if="${Eleve.login == null}" placeholder="Login">
+                 		<input class="form-control" type="hidden" name="login" th:value="${Eleve.login}" th:if="${Eleve.login}">
+                 		<label class="control-label">Nom :</label>
+                 		<input class="form-control" type="text" name="nom" th:value="${Eleve.nom}">
+                 		<label class="control-label">Adresse mail :</label>
+                 		<input class="form-control" type="email" name="email" th:value="${Eleve.email}">
+                 		<label class="control-label">Mot de passe :</label>
+                 		<input class="form-control" type="text" name="password" th:value="${Eleve.password}">
+                 		<label class="control-label">Matricule :</label>
+                 		<input class="form-control" type="number" name="matricule" th:value="${Eleve.matricule}">              
+              		</div>
+              		<button type="submit" th:if="${Eleve.login == null}" class="btn btn-success">Valider</button>
+              		<button type="submit" th:if="${Eleve.login}" class="btn btn-success">Editer</button>
+             	</form>
+             </div>
+          </div>
+        </div>
+</body>
+</html>

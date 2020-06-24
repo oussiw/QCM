@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{template1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Question</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Edit Question</div>
+            <div class="panel-body container">
+                <form th:object="${question}" th:action="@{/questions/infoedit(qcm_id=${idqcm})}" method="post" name="question">
+                    <div class="col-md-12">
+                        <label>
+                            Enonce : <input type="text" th:value="*{enonce}" class="form-control" name="enonce"/>
+                        </label>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label>
+                            Bareme : <input type="number" th:value="*{bareme}" class="form-control" name="bareme"/>
+                        </label>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label>
+                            Difficulte :
+                            <select name="planet" th:field="*{difficulte}" class="form-control">
+                                <option th:each="diff : ${T(ma.ac.emi.qcm.entities.Difficulte).values()}"
+                                        th:value="${diff}" th:text="${diff}" name="difficulte"></option>
+                            </select>
+                        </label>
+                    </div>
+                    <input type="text" th:field="*{id}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+                    <input type="text" th:field="*{formateur}" placeholder="Question" class="form-control mb-4 col-4" style="display: none">
+                    <input type="text" th:field="*{theme}" placeholder="theme" class="form-control mb-4 col-4" style="display: none">
+                    <input type="text" th:field="*{qcms}" placeholder="qcms" class="form-control mb-4 col-4" style="display: none">
+                    <br>
+                    <button type="submit" class="btn btn-primary">Valider</button>
+                    <a th:if="${idtheme}" th:href="@{/questions/list(theme_id=${idtheme})}"
+                       class="btn btn-primary btn-sm mb-3">
+                        Revenir à la page précédente
+                    </a>
+                    <a th:if="${idqcm}" th:href="@{/questions/list(qcm_id=${idqcm})}"
+                       class="btn btn-primary btn-sm mb-3">
+                        Revenir à la page précédente
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

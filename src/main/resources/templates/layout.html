@@ -1,0 +1,36 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<header>
+		<div class="nav navbar-default">
+			<div class="container-fluid">
+				<ul class="nav navbar-nav">
+					<li><a th:href="@{/operations}">Operations</a></li>
+					<li><a th:href="@{/Comptes}">Comptes</a></li>
+					<li><a th:href="@{/Clients}">Clients</a></li>
+				</ul>
+			</div>
+		</div>
+	</header>
+	<section layout:fragment="content"></section>
+	<footer>
+		<div class="navbar-fixed-bottom">
+			<small>@2020</small>
+		</div>
+	</footer>
+
+</body>
+</html>

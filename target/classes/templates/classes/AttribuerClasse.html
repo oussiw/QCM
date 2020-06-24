@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Ajouter à une classe</div>
+			<div class="panel-body" th:if="${Eleve}">
+				<form method="get" th:action="@{/classes/attribuerClasse}"
+					th:if="${Eleve.class.simpleName == 'Eleve' }">
+					<input type="hidden" th:value="${Eleve.login}" name="login" /> <label>Choisir
+						une classe : </label> <select name="cl">
+						<option>Sélectionner une classe</option>
+						<option th:each="c:${Classes}" th:value="${c.id}"
+							th:text="${c.nom}"></option>
+					</select>
+					<button type="submit" class="btn btn-success">Valider</button>
+				</form>
+			</div>
+			<div class="panel-body" th:if="${Formateur}">
+				<form method="get" th:action="@{/classes/attribuerClasse1}"
+					th:if="${Formateur.class.simpleName == 'Formateur' }">
+					<input type="hidden" th:value="${Formateur.login}" name="login" />
+					<label>Choisir une classe : </label> <select name="cl">
+						<option>Sélectionner une classe</option>
+						<option th:each="c:${Classes}" th:value="${c.id}"
+							th:text="${c.nom}"></option>
+					</select>
+					<button type="submit" class="btn btn-success">Valider</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

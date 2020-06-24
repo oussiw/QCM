@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{template1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter question</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Edit Question</div>
+        <div class="panel-body container">
+            <div class="col-md-4">
+                <form th:action="@{/questions/save}"  th:object="${questionA}" method="post">
+
+                    <input type="text" th:field="*{formateur}" placeholder="Question" class="form-control mb-4 col-4" style="display: none">
+
+                    Enonce : <input type="text" th:field="*{enonce}" name="enonce" class="form-control"/><br>
+                    Bareme : <input type="number" th:field="*{bareme}" name="bareme" class="form-control"><br>
+
+                    Difficulte :
+                    <select name="difficulte" class="form-control" th:field="*{difficulte}">
+                        <option th:each="diff:${T(ma.ac.emi.qcm.entities.Difficulte).values()}" th:value="${diff}"
+                                th:text="${diff}"></option>
+                    </select>
+                    <br>
+                    Test :
+                    <select name="test" class="form-control" th:field="*{test}">
+                        <option th:value="'true'" th:text="${'Vrai'}"></option>
+                        <option th:value="'false'" th:text="${'Faux'}"></option>
+                    </select>
+                    <br>
+                    Partage :
+                    <select name="partage" class="form-control" th:field="*{partage}">
+                        <option th:value="'true'" th:text="${'Vrai'}"></option>
+                        <option th:value="'false'" th:text="${'Faux'}"></option>
+                    </select>
+                    <br>
+                    <div th:if="${qcm_id}">
+                        Theme:
+                        <select name="theme" class="form-control" th:field="*{theme}">
+                            <option th:each="t:${themes}" th:value="${t.id}"
+                                    th:text="${t.nom}"></option>
+                        </select>
+                        <input type="text" th:field="*{qcms}" placeholder="theme" class="form-control mb-4 col-4" style="display: none">
+                    </div>
+                    <div th:if="${theme_id}">
+                        Qcm:
+                        <select name="qcm" class="form-control" th:field="*{qcms}">
+                            <option th:each="q:${qcms}" th:value="${q.id}"
+                                    th:text="${q.nom}"></option>
+                        </select>
+                        <input type="text" th:field="*{theme}" placeholder="theme" class="form-control mb-4 col-4" style="display: none">
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary col-2">Ajouter</button>
+                    <a th:href="@{/questions/list(qcm_id=${qcm_id})}"
+                       class="btn btn-primary btn-sm mb-3" th:if="${qcm_id>=0 && theme_id<0}">
+                        Revenir à la page précédente
+                    </a>
+                    <a th:href="@{/questions/list(theme_id=${theme_id})}"
+                       class="btn btn-primary btn-sm mb-3" th:if="${qcm_id<0 && theme_id>=0}">
+                        Revenir à la page précédente
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

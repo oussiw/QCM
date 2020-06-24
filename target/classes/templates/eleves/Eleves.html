@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/eleves.css">
+</head>
+<body>
+<h1 style="margin-bottom: 20px">Liste des Elèves</h1>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th>Matricule </th>
+        <th>Nom </th>
+        <th>Email</th>
+        <th>Login </th>
+        <th>Password </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="eleve,state : ${#lists.sort(eleves)}" th:class="${state.odd} ? 'odd' : 'even'">
+        <td th:text="${eleve.matricule}"></td>
+        <td th:text="${eleve.nom}"></td>
+        <td th:text="${eleve.email}"></td>
+        <td th:text="${eleve.login}"></td>
+        <td th:text="${eleve.password}"></td>
+    </tr>
+    </tbody>
+    </tbody>
+</table>
+<hr>
+<div class="forms">
+<h1 style="margin-bottom: 20px">Ajouter Nouvel Elève</h1>
+    <form class="form-horizontal " method="post" action="/eleves/addEleve"  >
+   	    <div class="form-group">
+            <label class="control-label col-sm-2" for="matricule">Matricule:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="matricule" name="matricule" placeholder="Entrer Matricule" >
+            </div>
+        </div>
+         <div class="form-group">
+            <label class="control-label col-sm-2" for="nom">Nom:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrer Nom">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="email">Email:</label>
+            <div class="col-sm-4">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+            </div>
+        </div>
+         <div class="form-group">
+            <label class="control-label col-sm-2" for="login">Login:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="login" name="login" placeholder="Entrer Login">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="password">Password:</label>
+            <div class="col-sm-4">
+                <input type="password" class="form-control" id="password" name="password"  placeholder="Entrer password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-default btn-primary">Ajouter</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

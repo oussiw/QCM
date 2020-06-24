@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="card container">
+    <h5 class="card-header primary">Saisir Niveau</h5>
+    <div class="card-body">
+        <form th:action="@{saveNiveau}" method="post" th:object="${niveau}">
+            <div class="form-group">
+                <label class="control-label">Id :</label>
+                <input type="hidden" class="form-control" name="nom" th:field="*{id}">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Nom :</label>
+                <input type="text" class="form-control" name="nom" th:field="*{nom}">
+            </div>
+            <div class="form-group">
+                <label>Formation:</label>
+                <select th:field="*{formation}">
+                    <option th:each="fr:${formations}" th:value="${fr.id}" th:text="${fr.nom}">
+                    </option>
+                </select>
+            </div>
+            <input type="submit" value="ajouter" class="btn btn-success">
+        </form>
+    </div>
+</div></body>
+</html>

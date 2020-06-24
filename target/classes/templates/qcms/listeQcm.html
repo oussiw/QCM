@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="styles/eleves.css">
+</head>
+<body>
+	<h1 style="margin-bottom: 20px">Liste des Qcm</h1>
+	<table class="table">
+		<thead class="thead-dark">
+			<tr>
+				<th>id</th>
+				<th>Nom</th>
+				<th>Mode</th>
+				<th>Type</th>
+				<th>Formatteur</th>
+				<th>Test</th>
+				<th>Partage</th>
+				<th>Classe</th>
+				<th>Matiere</th>
+				<th>Action</th>
+				<th>Questions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="qcm : ${liste}">
+				<td th:text="${qcm.id}"></td>
+				<td th:text="${qcm.nom}"></td>
+				<td th:text="${qcm.mode}"></td>
+				<td th:text="${qcm.type}"></td>
+				<td th:text="${qcm.formateur.nom}"></td>
+				<td th:text="${qcm.test}"></td>
+				<td th:text="${qcm.partage}"></td>
+				<td th:text="${qcm.classe.nom}"></td>
+				<td th:text="${qcm.matiere.nom}"></td>
+				<td><a  th:href="@{/qcms/deleteQcm/{id}(id=${qcm.id})}">Delete </a>|<a th:href="@{/edit/{id}(id=${qcm.id})}"> update</a></td>
+				<td><a th:href="@{/qcms/questions/list(qcm_id=${qcm.id})}"> Questions</a></td>
+
+			</tr>
+		</tbody>
+		</tbody>
+	</table>
+	<hr>
+	<div class="forms">
+		<h1 style="margin-bottom: 20px">Ajouter Un Nouvel Qcm</h1>
+		<form class="form-horizontal " method="post" action="/qcms/addQcm" >
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="id">Id:</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="id" name="id"
+						placeholder="Entrer Id">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="nom">Nom:</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="nom" name="nom"
+						placeholder="Entrer Nom">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="type">Type:</label>
+				<div class="col-sm-4">
+					<select name="type">
+						<option
+							th:each="state : ${T(ma.ac.emi.qcm.entities.Type).values()}"
+							th:value="${state}" th:text="${state}"></option>
+					</select> 
+					
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="test">Test:</label>
+				<div class="col-sm-4">
+					<select name="test">
+						<option th:value="'true'" th:text="Vrai"></option>
+						<option th:value="'false'" th:text="Faux"></option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="Partage">Partage:</label>
+				<div class="col-sm-4">
+					<select name="partage">
+						<option th:value="'true'" th:text="Vrai"></option>
+						<option th:value="'false'" th:text="Faux"></option>
+					</select>
+
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="mode">Mode:</label>
+				<div class="col-sm-4">
+					<select name="mode">
+						<option
+							th:each="state : ${T(ma.ac.emi.qcm.entities.Mode).values()}"
+							th:value="${state}" th:text="${state}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="formateur">Formateur:</label>
+				<div class="col-sm-4">
+
+					
+						<input type ="text" class="form-control" th:name="formateur" th:value="${formateur}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="classe">Classe</label>
+				<div class="col-sm-4">
+
+					<input type="text" class="form-control" th:name="classe" th:value="${classe}"
+						placeholder="Entrer Classe">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="matiere">Matiere</label>
+				<div class="col-sm-4">
+
+					<input type="text" class="form-control" th:name="matiere" th:value="${matiere}"
+						placeholder="Entrer Matiere">
+				</div>
+			</div>
+
+
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-4">
+					<button type="submit" class="btn btn-default btn-primary">Ajouter</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

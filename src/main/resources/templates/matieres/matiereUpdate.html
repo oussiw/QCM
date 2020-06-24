@@ -1,0 +1,60 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+
+<head>
+<meta charset="UTF-8" />
+<title>Theme</title>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div layout:fragment="content">
+		<br />
+		<!-- Panel -->
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h1>Modifier une Matiere</h1>
+				</div>
+				<div class="panel-body">
+					<form th:action="@{/matieres/confirmation}" method="POST">
+						<div class="form-group">
+							<label class="control-label">Id:</label> <input
+								class="form-control" type="text" name="id"
+								th:value="${matiere.id}" readonly="readonly" />
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">Nom:</label> <input
+								class="form-control" type="text" name="nom"
+								th:value="${matiere.nom}" />
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">Niveau:</label> <select name="n_id">
+								<option th:each="n:${listNiveau}" th:value="${n.id}"
+									th:text="${n.nom}" />
+							</select>
+						</div>
+
+						<button class="btn btn-primary" type="submit">Save</button>
+
+					</form>
+				</div>
+			</div>
+			<a class="btn btn-primary" th:href="@{/matieres/}">Back</a>
+		</div>
+
+	</div>
+
+</body>
+</html>

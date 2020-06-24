@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{template1}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List des reponses</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Informations question:</div>
+        <div class="panel-body">
+            <div>
+                <label>Enoncé:</label>
+                <label th:text="${question.enonce}"></label>
+            </div>
+            <div>
+                <label>Bareme:</label>
+                <label th:text="${question.bareme}"></label>
+            </div>
+            <div>
+                <label>Difficulte:</label>
+                <label th:text="${question.difficulte}"></label>
+            </div>
+            <div>
+                <label>Test:</label>
+                <label th:text="${question.test}"></label>
+            </div>
+            <div>
+                <label>Partage:</label>
+                <label th:text="${question.partage}"></label>
+            </div>
+            <div>
+                <a th:href="@{/reponses/add(questionId=${question.id})}"
+                   class="btn btn-primary btn-sm mb-3">
+                    Ajouter une reponse
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">Liste des reponses</div>
+        <div class="panel-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Reponse</th>
+                    <th>Correcte</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reponse : ${listReponses}">
+                    <td th:text="${reponse.reponse}"/>
+                    <td th:text="${reponse.correcte}"/>
+                    <td align="center">
+                        <a th:href="'/reponses/update/'+${reponse.id}">Modifier</a>
+                        |
+                        <a th:href="'/reponses/delete/'+${reponse.id}">Supprimer</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <ul class="nav nav-pills">
+                    <li th:class="${status.index==pageCourante}?'active':''"
+                        th:each="p,status:${pages}">
+                        <a th:href="'/reponses/list?question_id='+${question.id}+'&page='+${status.index}+'&size='+${size}" th:text="${status.index}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

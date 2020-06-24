@@ -1,0 +1,57 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+	
+<head>
+<meta charset="UTF-8" />
+<title>Theme</title>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div layout:fragment="content">
+		<br />
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h1>Niveau Confirmation:</h1>
+				</div>
+				<div class="panel-body"></div>
+
+				<!-- Table -->
+				<div class="container">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Niveau_Nom</th>
+								<th>Formation_Nom</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td th:text="${newNiveau.nom}">
+								<td th:text="${newNiveau.formation.nom}">
+							</tr>
+						</tbody>
+					</table>
+					<a class="btn btn-primary" th:href="@{/niveaux/}">Back</a>
+				</div>
+			</div>
+
+		</div>
+		
+	</div>
+
+
+
+</body>
+</html>

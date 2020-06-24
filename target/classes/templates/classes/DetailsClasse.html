@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Les détails de la classe</div>
+			<div class="panel-body">
+				<div class="panel panel-success">
+					<div class="panel-heading">Liste des élèves inscrits dans la
+						classe</div>
+					<div class="panel-body">
+						<table class="table table-stripped">
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Adresse mail</th>
+									<th>Login</th>
+									<th>Password</th>
+									<th>Matricule</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="e:${Classe.eleves}">
+									<td th:text=${e.nom}></td>
+									<td th:text=${e.email}></td>
+									<td th:text=${e.login}></td>
+									<td th:text=${e.password}></td>
+									<td th:text=${e.matricule}></td>
+									<td><a class="btn btn-danger"
+										th:href="@{supprimerEleve(login=${e.login},id=${Classe.id})}">Supprimer</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<hr />
+					</div>
+				</div>
+
+				<hr />
+
+				<div class="panel panel-danger">
+					<div class="panel-heading">Liste des formateurs dans la
+						classe</div>
+					<div class="panel-body">
+						<table class="table table-stripped">
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Adresse mail</th>
+									<th>Login</th>
+									<th>Password</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="f:${Classe.formateurs}">
+									<td th:text=${f.nom}></td>
+									<td th:text=${f.email}></td>
+									<td th:text=${f.login}></td>
+									<td th:text=${f.password}></td>
+									<td><a class="btn btn-danger"
+										th:href="@{supprimerFormateur(login=${f.login},id=${Classe.id})}">Supprimer</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<a class="btn btn-block btn-primary" th:href="@{/}">Accueil</a>
+
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

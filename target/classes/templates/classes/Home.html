@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Liste des classes</div>
+			<div class="panel-body">
+				<table class="table table-stripped">
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Options</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="c:${Classes}">
+							<td th:text=${c.nom}></td>
+							<td><a class="btn btn-primary"
+								th:href="@{/classes/editerClasse(id=${c.id})}">Editer</a> <a
+								class="btn btn-danger"
+								th:href="@{/classes/supprimerClasse(id=${c.id})}">Supprimer</a>
+								<a class="btn btn-warning"
+								th:href="@{/classes/detailsClasse(id=${c.id})}">Détails</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<hr />
+				<a class="btn btn-success" th:href="@{/classes/ajouterClasse}">Ajouter
+					une classe</a>
+			</div>
+		</div>
+
+		<hr />
+
+		<div class="panel panel-success">
+			<div class="panel-heading">Liste des élèves</div>
+			<div class="panel-body">
+				<table class="table table-stripped">
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Adresse mail</th>
+							<th>Login</th>
+							<th>Password</th>
+							<th>Matricule</th>
+							<th>Options</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="e:${Eleves}">
+							<td th:text=${e.nom}></td>
+							<td th:text=${e.email}></td>
+							<td th:text=${e.login}></td>
+							<td th:text=${e.password}></td>
+							<td th:text=${e.matricule}></td>
+							<td><a class="btn btn-primary"
+								th:href="@{/classes/editerEleve(login=${e.login})}">Editer</a> <a
+								class="btn btn-danger"
+								th:href="@{/classes/supprimerEleve(login=${e.login})}">Supprimer</a> <a
+								class="btn btn-warning"
+								th:href="@{/classes/attribuerClasseE(login=${e.login})}">Ajouter à
+									une classe</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<hr />
+				<a class="btn btn-success" th:href="@{/classes/ajouterEleve}">Ajouter un
+					élève</a>
+			</div>
+		</div>
+
+		<hr />
+
+		<div class="panel panel-danger">
+			<div class="panel-heading">Liste des formateurs</div>
+			<div class="panel-body">
+				<table class="table table-stripped">
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Adresse mail</th>
+							<th>Login</th>
+							<th>Password</th>
+							<th>Options</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="f:${Formateurs}">
+							<td th:text=${f.nom}></td>
+							<td th:text=${f.email}></td>
+							<td th:text=${f.login}></td>
+							<td th:text=${f.password}></td>
+							<td><a class="btn btn-primary"
+								th:href="@{/classes/editerFormateur(login=${f.login})}">Editer</a> <a
+								class="btn btn-danger"
+								th:href="@{/classes/supprimerFormateur(login=${f.login})}">Supprimer</a>
+								<a class="btn btn-warning"
+								th:href="@{/classes/attribuerClasseF(login=${f.login})}">Ajouter à
+									une classe</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<hr />
+				<a class="btn btn-success" th:href="@{/classes/ajouterFormateur}">Ajouter
+					un formateur</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

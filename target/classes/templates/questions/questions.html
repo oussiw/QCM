@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{template1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Questions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Questions</div>
+            <div class="panel-body container">
+                <label>Formation</label>
+                <form th:action="@{/questions/niveaux}" method="get">
+                    <div class="col-md-4">
+
+                        <select name="formation" class="form-control" th:with="id=${param.formation}">
+                            <option th:each="i:${formations}" th:value="${i.id}" th:text="${i.nom}"
+                                    th:selected="${i.id}==${idformation}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                </form>
+                <br>
+                <hr>
+                <label th:if="${niveaux}">Niveaux</label>
+                <form th:action="@{/questions/matieres}" th:if="${niveaux}">
+
+                    <div class="col-md-4">
+                        <select name="niveau" class="form-control">
+                            <option th:each="i:${niveaux}" th:value="${i.id}" th:text="${i.nom}"
+                                    th:selected="${i.id}==${idNiveau}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                </form>
+                <br>
+                <hr>
+                <label th:if="${matieres}">Matieres</label>
+                <form th:action="@{/questions/qcm}" th:if="${matieres}">
+                    <div class="col-md-4">
+                        <select name="matiere" class="form-control">
+                            <option th:each="i:${matieres}" th:value="${i.id}" th:text="${i.nom}"
+                                    th:selected="${i.id}==${idMatiere}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                </form>
+                <br>
+                <hr>
+                <label th:if="${qcms}">QCMs</label>
+                <form th:action="@{/questions/listeqst}" th:if="${qcms}">
+
+                    <div class="col-md-4">
+                        <select name="qcm" class="form-control">
+                            <option th:each="i:${qcms}" th:value="${i.id}" th:text="${i.nom}"
+                                    th:selected="${i.id}==${idQcm}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                </form>
+                <br><br><br>
+                <label th:if="${questions}">Questions</label>
+                <div th:if="${questions}">
+                    <div class="col-md-12 container">
+                        <a th:href="@{/questions/addQuestion}" class="btn btn-primary btn-sm mb-3">Ajouter question</a>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Enonce</th>
+                                <th>Bareme</th>
+                                <th>Difficulte</th>
+                                <th>Reponses</th>
+                                <th>Action</th>
+                                <th></th>
+                            </tr>
+                            <tr th:each="q:${questions}" >
+                                <td th:text="*{q.enonce}"></td>
+                                <td th:text="*{q.bareme}"></td>
+                                <td th:text="*{q.difficulte}"></td>
+                                <td><a th:href="@{/questions/afficherReponses(question_id=${q.id})}">Reponses</a></td>
+                                <td><a th:href="@{/questions/infoqst/{id}(id=${q.id})}">Edit</a></td>
+                                <td><a th:href="@{/questions/deletequestion/{id}(id=${q.id})}">Del</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

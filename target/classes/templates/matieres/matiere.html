@@ -1,0 +1,109 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+
+<head>
+<meta charset="UTF-8" />
+<title>Matiere</title>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div layout:fragment="content">
+		<br />
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h1>Matiere</h1>
+				</div>
+				<div class="panel-body"></div>
+				<!-- Search -->
+				<div class="container">
+					<form th:action="@{/matieres/}" method="GET">
+						<label for="mcNomMatiere">Mot Clé:</label> <input type="text"
+							id="mcNomMatiere" name="mc" th:value="${mc}" /> <input
+							type="submit" class="btn btn-primary" />
+					</form>
+				</div>
+
+				<!-- Table -->
+				<div class="container">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Matiere_Nom</th>
+								<th>Niveau_Nom</th>
+								<th>Update</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr th:each="m:${pageMatiere}">
+								<td th:text="${m.nom}">
+								<td th:text="${m.niveau.nom}">
+								<td><a class="btn btn-success" th:href="@{/matieres/update(id=${m.id})}">Update</a></td>
+								<td><a class="btn btn-danger" 
+									onclick="return confirm('Voulez vous vraiment supprimer ce theme?')"
+									th:href="@{/matieres/delete(id=${m.id},p=${p},s=${s},mc=${mc})}">Delete</a></td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="panel-footer">
+					<!-- navbar -->
+					<div class="container">
+						<ul class="nav nav-pills">
+							<li th:class="${status.index}==${p} ? 'active' : ''"
+								th:each="numPage,status:${nbPages}"><a
+								th:text="${status.index}"
+								th:href="@{/matieres/(p=${status.index},s=${s},mc=${mc})}"></a></li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Panel -->
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h1>Ajouter une Matiere</h1>
+				</div>
+				<div class="panel-body">
+					<form th:action="@{/matieres/confirmation}" method="POST">
+						<div class="form-group">
+							<label class="control-label">Nom:</label> <input
+								class="form-control" type="text" name="nom" />
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">Niveau:</label> <select name="n_id">
+								<option th:each="n:${listNiveau}" th:value="${n.id}"
+									th:text="${n.nom}" />
+							</select>
+						</div>
+
+						<button class="btn btn-primary" type="submit">Save</button>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

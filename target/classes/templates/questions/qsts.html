@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{template1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Questions</title>
+</head>
+<div class="container" layout:fragment="content">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Informations question:</div>
+        <div class="panel-body">
+            <a th:href="@{/questions/add(theme_id=${themeid})}" class="btn btn-primary btn-sm mb-3" th:if="${themeid}" >Ajouter question</a>
+            <a th:href="@{/questions/add(qcm_id=${qcmId})}" class="btn btn-primary btn-sm mb-3" th:if="${qcmId}" >Ajouter question</a>
+            <table class="table table-striped">
+                <tr>
+                    <th>Enonce</th>
+                    <th>Bareme</th>
+                    <th>Difficulte</th>
+                    <th>Action</th>
+                    <th>Reponses</th>
+                </tr>
+                <tr th:each="q : ${listQuestion}" >
+                    <td th:text="*{q.enonce}"></td>
+                    <td th:text="*{q.bareme}"></td>
+                    <td th:text="*{q.difficulte}"></td>
+                    <td>
+                        <a th:href="'/questions/infoqst/'+${q.id}">Modifier</a>
+                        |
+                        <a th:href="'/questions/deletequestion/'+${q.id}">Supprimer</a>
+                    </td>
+                    <td><a th:href="@{/questions/afficherReponses(question_id=${q.id})}">Reponses</a></td>
+                </tr>
+            </table>
+            <div>
+                <ul class="nav nav-pills" th:if="${qcmId}">
+                    <li th:class="${status.index==pageCourante}?'active':''"
+                        th:each="p,status:${pages}">
+                        <a th:href="'/questions/list?qcm_id='+${qcmId}+'&page='+${status.index}+'&size='+${size}" th:text="${status.index}"></a>
+                    </li>
+                </ul>
+                <ul class="nav nav-pills" th:if="${themeid}">
+                    <li th:class="${status.index==pageCourante}?'active':''"
+                        th:each="p,status:${pages}" th:if="${themeid>=0}">
+                        <a th:href="'/questions/list?theme_id='+${themeid}+'&page='+${status.index}+'&size='+${size}" th:text="${status.index}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

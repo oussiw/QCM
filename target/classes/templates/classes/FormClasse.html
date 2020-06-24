@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="panel panel-primary">
+			<div class="panel-heading" th:if="${Classe.nom == null}">Ajouter
+				une nouvelle classe</div>
+			<div class="panel-heading" th:if="${Classe.nom}">Editer une
+				classe</div>
+			<div class="panel-body">
+				<form method="post" th:action="@{/classes/saveClasse}">
+					<div class="form-group">
+						<label class="control-label">Nom :</label> <input
+							class="form-control" type="hidden" name="id"
+							th:value="${Classe.id}"> <input class="form-control"
+							type="text" name="nom" th:value="${Classe.nom}">
+					</div>
+					<button type="submit" th:if="${Classe.nom == null}"
+						class="btn btn-success">Valider</button>
+					<button type="submit" th:if="${Classe.nom}" class="btn btn-success">Editer</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
