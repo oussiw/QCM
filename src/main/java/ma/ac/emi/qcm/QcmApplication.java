@@ -106,8 +106,6 @@ public class QcmApplication {
 			reponseRepository.save(new Reponse("The second question", false, question1));
 			reponseRepository.save(new Reponse("The third question", true, question1));
 
-			//jvjh
-
 		};
 	}
 
