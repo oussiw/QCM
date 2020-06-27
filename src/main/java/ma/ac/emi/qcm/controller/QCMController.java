@@ -216,8 +216,6 @@ public class QCMController {
 		qcmRepository.save(qcm1);
 		Note note = new Note(0,eleveRepository.getOne(login),qcm1);
 		noteRepository.save(note);
-//		note.setQuestions(qcm1.getQuestions());
-//		noteRepository.save(note);
 		return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&note_id="+note.getId()+"&qcm_id="+qcm1.getId();
 	}
 
@@ -232,11 +230,9 @@ public class QCMController {
 				questions1.add(question);
 				break;
 			}
-			Random r = new Random();
 			Question question = questions.get(getRandomNumberInRange(0,max));
 			questions1.add(question);
 			questions.remove(question);
-
 		}
 		return questions1;
 	}

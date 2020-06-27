@@ -1,6 +1,10 @@
 package ma.ac.emi.qcm.entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -18,6 +22,16 @@ public class QCM {
 	private Mode mode;
 	private boolean test;
 	private boolean partage;
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	private LocalDate date = LocalDate.now();
 
 	@ManyToOne
 	@JoinColumn(name = "classe_id", nullable = false)
@@ -98,6 +112,7 @@ public class QCM {
 	public void setMode(Mode mode) {
 		this.mode = mode;
 	}
+
 
 	public boolean isTest() {
 		return test;

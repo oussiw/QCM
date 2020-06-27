@@ -15,11 +15,13 @@
         <input type="text" th:field="*{type}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
         <input type="text" th:field="*{mode}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
         <input type="text" th:field="*{consignes}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{date}" class="form-control mb-4 col-4" style="display: none" >
         <h3 th:if="*{isTest()==true}">Ceci est un test</h3>
         <h3 th:if="*{isTest()==false}">Ceci est un entrainement</h3>
         <label th:text="'Voici un qcm dont le mode est: '+*{mode}"></label><br>
         <label th:text="'Matière: '+*{matiere.nom}"></label><br>
         <label th:text="'Ce qcm est du type: '+*{type}"></label><br>
+        <label th:text="'Date: '+*{date}"></label><br>
         <div th:if="*{consignes == null}">
             <label>Consignes: </label><br>
             <ul>
