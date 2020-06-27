@@ -22,6 +22,7 @@ public class QCM {
 	private Mode mode;
 	private boolean test;
 	private boolean partage;
+	private LocalDate date = LocalDate.now() ;
 
 	public LocalDate getDate() {
 		return date;
@@ -30,8 +31,6 @@ public class QCM {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-
-	private LocalDate date = LocalDate.now();
 
 	@ManyToOne
 	@JoinColumn(name = "classe_id", nullable = false)
@@ -112,7 +111,6 @@ public class QCM {
 	public void setMode(Mode mode) {
 		this.mode = mode;
 	}
-
 
 	public boolean isTest() {
 		return test;

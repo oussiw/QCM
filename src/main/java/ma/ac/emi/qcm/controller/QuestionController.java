@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/questions")
@@ -167,29 +169,48 @@ public class QuestionController {
 							 @RequestParam(name = "qcm_id") Long qcm_id,
 							 @RequestParam(name = "note_id")  Long note_id,
 							 @RequestParam(name = "classe_id") Long classe_id,
-							 @RequestParam(name = "matiere_id") Long matiere_id,
-							 @RequestParam(name = "question_idex",defaultValue = "0",required = false)Integer index){
+							 @RequestParam(name = "matiere_id") Long matiere_id){
 
-		Question question = questionRepo.findByThemeandAndFormateur(
-				themeRepo.getThemeByMatiere(matiereRepo.getOne(matiere_id)).get(0),
-				formateurRepo.findFormateurByClassAndMatiere(
-						classeRepo.getOne(classe_id),
-						matiereRepo.getOne(matiere_id)).get(0)).get(index);
-		Reponse reponse = new Reponse();
-		reponse.setQuestion(question);
+//		Question question = questionRepo.findByThemeandAndFormateur(
+//				themeRepo.getThemeByMatiere(matiereRepo.getOne(matiere_id)).get(0),
+//				formateurRepo.findFormateurByClassAndMatiere(
+//						classeRepo.getOne(classe_id),
+//						matiereRepo.getOne(matiere_id)).get(0)).get(index);
 		QCM qcm = qcmRepository.getOne(qcm_id);
+		Question q2 = getRandomQuestion(qcm.getQuestions());
+		Reponse reponse = new Reponse();
+		reponse.setQuestion(q2);
+
 		System.out.println(">>>>>>>>>>>>>>"+qcm.getNom());
 		Matiere matiere = matiereRepo.getOne(matiere_id);
 		Classe classe = classeRepo.getOne(classe_id);
-		model.addAttribute("question",question);
+		model.addAttribute("question",q2);
 		model.addAttribute("reponse",reponse);
 		model.addAttribute("note_id",note_id);
 		model.addAttribute("matiereA", matiere);
 		model.addAttribute("classeA", classe);
-		model.addAttribute("index",index);
+		model.addAttribute("index",q2.getId());
 		model.addAttribute("qcm",qcm);
 		return "questions/question";
 	}
+
+	private Question getRandomQuestion(List<Question> questions){
+		int max = questions.size()-1;
+		Question question = questions.get(getRandomNumberInRange(0,max));
+		return question;
+	}
+
+	private static int getRandomNumberInRange(int min, int max) {
+
+		if (min >= max) {
+//			throw new IllegalArgumentException("max must be greater than min");
+			return 0;
+		}
+
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
+	}
+
 
 	@PostMapping("/traiterQuestion")
 	public String traiterQuestion(@ModelAttribute("Reponse")Reponse reponse,
@@ -197,17 +218,13 @@ public class QuestionController {
 								  @RequestParam(name = "note_id") Long note_id,
 								  @RequestParam(name = "classe_id") Long classe_id,
 								  @RequestParam(name = "matiere_id") Long matiere_id,
-								  @RequestParam(name = "question_idex",defaultValue = "0")Integer index){
+								  @RequestParam(name = "question_id")Long index){
 
 		System.out.println(">>>>>>>>>>>>>>"+reponse.getReponse());
 		QCM qcm = qcmRepository.getOne(qcm_id);
-		Question question = qcm.getQuestions().get(index);
+		Question question = questionRepo.getOne(index);
+		System.out.println(">>>>> Reponse >>>>>>>>>"+question.getEnonce());
 		for(Reponse rep:question.getReponses()){
-//			Note note = noteRepository.getOne(note_id);
-//			note.setNote(note.getNote()+question.getBareme());
-//			noteRepository.save(note);
-//			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+reponse.getReponse());
-//			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+rep.getReponse());
 			if(reponse.getReponse().equals(rep.getReponse()) && rep.isCorrecte()){
 				Note note = noteRepository.getOne(note_id);
 				note.setNote(note.getNote()+question.getBareme());
@@ -215,10 +232,12 @@ public class QuestionController {
 				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+note.getNote());
 			}
 		}
-		if(index < qcm.getQuestions().size()-1) {
-			index++;
-			return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&qcm_id="+qcm.getId()+"&note_id="+note_id+"&question_idex="+index;
+		if(qcm.getQuestions().size()>1) {
+			qcm.getQuestions().remove(question);
+			qcmRepository.save(qcm);
+			return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&qcm_id="+qcm.getId()+"&note_id="+note_id;
 		}
+		qcmRepository.delete(qcm);
 		return "redirect:/qcms/resultatQcm?classe_id="+classe_id+"&matiere_id="+matiere_id+"&note_id="+note_id;
 	}
 

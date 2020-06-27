@@ -38,6 +38,9 @@ public class QCMController {
 	@Autowired
 	NoteRepository noteRepository;
 
+	@Autowired
+	ThemeRepository themeRepo;
+
 
 	public String listQcm(Model model, @RequestParam(name = "formateur_id", defaultValue = "") String formateurLogin,
 			@RequestParam(name = "matiere_id", defaultValue = "-1") Long matiereid,
@@ -161,17 +164,63 @@ public class QCMController {
 		qcm.setMatiere(matiere);
 		Mode m = qcm.getMode();
 		Boolean b = qcm.isTest();
-		Formateur formateur = formateurRepository.findFormateurByClassAndMatiere(classe,matiere).get(0);
-		List<QCM> qcms = qcmRepository.findQCMByMatFormModeTest(matiere,formateur,m,b);
-		if(qcms.size()>0){
-			qcm = qcms.get(0);
-			model.addAttribute("QCM",qcm);
-			model.addAttribute("eleve",eleve);
-			model.addAttribute("matiereA", matiere);
-			model.addAttribute("classeA", classe);
-			return "qcms/qcm-form";
+		try{
+			Formateur formateur = formateurRepository.findFormateurByClassAndMatiere(classe,matiere).get(0);
+			if(formateur==null){
+				throw new RuntimeException("Aucun QCM ou question dont le mode est VRAI/FAUX n'est enregistré.");
+			}
+			List<QCM> qcms = qcmRepository.findQCMByMatFormModeTest(matiere,formateur,m,b);
+			if(qcms.size()>0){
+				qcm = qcms.get(0);
+				model.addAttribute("QCM",qcm);
+				model.addAttribute("eleve",eleve);
+				model.addAttribute("matiereA", matiere);
+				model.addAttribute("classeA", classe);
+				return "qcms/qcm-form";
+			}
+			else{
+				throw new RuntimeException("Aucun QCM ou question dont le mode est VRAI/FAUX n'est enregistré sur la matière "
+						+matiere.getNom() +" pour la classe : "+classe.getNom()+" / "+ classe.getNiveau().getNom());
+			}
+		}catch (Exception e){
+			throw(new RuntimeException("Aucun formateur ou test n'est enregistré sur la matière "+matiere.getNom()
+					+" pour la classe : "+classe.getNom()+" / "+ classe.getNiveau().getNom()));
 		}
-		return "/oups";
+
+	}
+
+	@PostMapping("/commencerQCM")
+	public String commencerQCM(
+			@ModelAttribute("QCM")QCM qcm,
+			@RequestParam(name = "eleve_id") String login,
+			@RequestParam(name = "classe_id") Long classe_id,
+			@RequestParam(name = "matiere_id") Long matiere_id){
+
+		Matiere matiere = matiereRepository.getOne(matiere_id);
+		Classe classe = classeRepository.getOne(classe_id);
+		Formateur formateur = formateurRepository.findFormateurByClassAndMatiere(classe,matiere).get(0);
+		QCM qcm1 = new QCM(qcm.getNom().concat('_'+login),qcm.getType(),qcm.getMode(),qcm.isTest(),
+				qcm.isPartage(),classe,formateur,matiere,qcm.getConsignes());
+		qcmRepository.save(qcm1);
+		qcm1.setQuestions(questionRepo.findByThemeandAndFormateur(
+				themeRepo.getThemeByMatiere(matiereRepository.getOne(matiere_id)).get(0),
+				formateurRepository.findFormateurByClassAndMatiere(
+						classeRepository.getOne(classe_id),
+						matiereRepository.getOne(matiere_id)).get(0)));
+		qcmRepository.save(qcm1);
+		Note note = new Note(0,eleveRepository.getOne(login),qcm1);
+		noteRepository.save(note);
+
+		QCM qcm2 = new QCM(qcm.getNom().concat('_'+login+'2'),qcm.getType(),qcm.getMode(),qcm.isTest(),
+				qcm.isPartage(),classe,formateur,matiere,qcm.getConsignes());
+		qcmRepository.save(qcm2);
+		qcm2.setQuestions(questionRepo.findByThemeandAndFormateur(
+				themeRepo.getThemeByMatiere(matiereRepository.getOne(matiere_id)).get(0),
+				formateurRepository.findFormateurByClassAndMatiere(
+						classeRepository.getOne(classe_id),
+						matiereRepository.getOne(matiere_id)).get(0)));
+		qcmRepository.save(qcm2);
+		return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&note_id="+note.getId()+"&qcm_id="+qcm2.getId();
 	}
 
 	@GetMapping("/resultatQcm")
@@ -198,54 +247,4 @@ public class QCMController {
 		model.addAttribute("classeA", classe);
 		return "qcms/qcm-form";
 	}
-
-	@PostMapping("/commencerQCM")
-	public String commencerQCM(
-			@ModelAttribute("QCM")QCM qcm,
-			@RequestParam(name = "eleve_id") String login,
-			@RequestParam(name = "classe_id") Long classe_id,
-			@RequestParam(name = "matiere_id") Long matiere_id){
-
-		Matiere matiere = matiereRepository.getOne(matiere_id);
-		Classe classe = classeRepository.getOne(classe_id);
-		Formateur formateur = formateurRepository.findFormateurByClassAndMatiere(classe,matiere).get(0);
-		QCM qcm1 = new QCM(qcm.getNom().concat('_'+login),qcm.getType(),qcm.getMode(),qcm.isTest(),
-				qcm.isPartage(),classe,formateur,matiere,qcm.getConsignes());
-		qcmRepository.save(qcm1);
-		qcm1.setQuestions(getRandomQuestions(questionRepo.findByQCM(qcm)));
-		qcmRepository.save(qcm1);
-		Note note = new Note(0,eleveRepository.getOne(login),qcm1);
-		noteRepository.save(note);
-		return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&note_id="+note.getId()+"&qcm_id="+qcm1.getId();
-	}
-
-	private List<Question> getRandomQuestions(List<Question> questions){
-		int max = questions.size();
-		int t =  questions.size();
-		List<Question> questions1 = new ArrayList<>();
-		for(int i=0;i<t;i++){
-			if(i<t-1) max--;
-			if(i==t-1){
-				Question question = questions.get(0);
-				questions1.add(question);
-				break;
-			}
-			Question question = questions.get(getRandomNumberInRange(0,max));
-			questions1.add(question);
-			questions.remove(question);
-		}
-		return questions1;
-	}
-
-	private static int getRandomNumberInRange(int min, int max) {
-
-		if (min >= max) {
-			throw new IllegalArgumentException("max must be greater than min");
-		}
-
-		Random r = new Random();
-		return r.nextInt((max - min) + 1) + min;
-	}
-
-
 }

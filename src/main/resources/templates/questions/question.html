@@ -11,7 +11,7 @@
 
     <form
             th:action="@{/questions/traiterQuestion(note_id=${note_id}, matiere_id=${matiereA.id},
-            classe_id=${classeA.id},question_idex=${index},qcm_id=${qcm.id})}"
+            classe_id=${classeA.id},question_id=${index},qcm_id=${qcm.id})}"
             method="post"
             th:object="${reponse}">
         <div>
