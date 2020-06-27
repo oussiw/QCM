@@ -9,23 +9,26 @@
 <body>
 <div class="content">
 
-    <form
+    <form th:object="${reponse}"
             th:action="@{/questions/traiterQuestion(note_id=${note_id}, matiere_id=${matiereA.id},
-            classe_id=${classeA.id},question_id=${index},qcm_id=${qcm.id})}"
-            method="post"
-            th:object="${reponse}">
+            classe_id=${classeA.id},question_id=${index},qcm_id=${qcm.id},
+                        numero_qst=${numero_qst},total_qst=${total_qst})}"
+            method="post">
         <div>
+
+            <h3 th:text="'Question: '+${numero_qst}+' / '+${total_qst}"></h3>
+            <h3 th:text="'Bareme: '+${question.bareme}"></h3>
             <hr>
-            <h3>Questions: </h3>
             <label th:text="${question.enonce}"></label>
             <ol>
                 <li th:each="response : ${question.reponses}">
-                    <input type="radio" th:value="${response.reponse}" th:name="reponse" >
+                    <input type="radio" th:value="${response.reponse}" th:name="reponse" required>
                     <label th:text="${response.reponse}"></label><br>
                 </li>
             </ol>
         </div>
-        <button type="submit" class="btn btn-default">Envoyer</button>
+        <button type="submit" class="btn btn-default" th:if="${numero_qst<total_qst}">Envoyer </button>
+        <button type="submit" class="btn btn-default" th:if="${numero_qst==total_qst}">Valider</button>
     </form>
 
 </div>

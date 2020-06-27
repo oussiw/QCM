@@ -76,8 +76,6 @@ public class QcmApplication {
 			Classe classe1 = new Classe("G INF", niveau1);
 			classeRepo.save(classe1);
 
-
-
 			classe.addFormateur(formateur);
 			classe.addFormateur(formateur1);
 

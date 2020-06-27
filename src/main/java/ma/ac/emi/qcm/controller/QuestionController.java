@@ -169,13 +169,10 @@ public class QuestionController {
 							 @RequestParam(name = "qcm_id") Long qcm_id,
 							 @RequestParam(name = "note_id")  Long note_id,
 							 @RequestParam(name = "classe_id") Long classe_id,
-							 @RequestParam(name = "matiere_id") Long matiere_id){
+							 @RequestParam(name = "matiere_id") Long matiere_id,
+							 @RequestParam(name = "numero_qst",defaultValue = "1")Integer numero_qst,
+							 @RequestParam(name = "total_qst",defaultValue = "1")Integer total_qst){
 
-//		Question question = questionRepo.findByThemeandAndFormateur(
-//				themeRepo.getThemeByMatiere(matiereRepo.getOne(matiere_id)).get(0),
-//				formateurRepo.findFormateurByClassAndMatiere(
-//						classeRepo.getOne(classe_id),
-//						matiereRepo.getOne(matiere_id)).get(0)).get(index);
 		QCM qcm = qcmRepository.getOne(qcm_id);
 		Question q2 = getRandomQuestion(qcm.getQuestions());
 		Reponse reponse = new Reponse();
@@ -191,6 +188,8 @@ public class QuestionController {
 		model.addAttribute("classeA", classe);
 		model.addAttribute("index",q2.getId());
 		model.addAttribute("qcm",qcm);
+		model.addAttribute("numero_qst",numero_qst);
+		model.addAttribute("total_qst",total_qst);
 		return "questions/question";
 	}
 
@@ -218,7 +217,9 @@ public class QuestionController {
 								  @RequestParam(name = "note_id") Long note_id,
 								  @RequestParam(name = "classe_id") Long classe_id,
 								  @RequestParam(name = "matiere_id") Long matiere_id,
-								  @RequestParam(name = "question_id")Long index){
+								  @RequestParam(name = "question_id")Long index,
+								  @RequestParam(name = "numero_qst",defaultValue = "1")Integer numero_qst,
+								  @RequestParam(name = "total_qst",defaultValue = "1")Integer total_qst){
 
 		System.out.println(">>>>>>>>>>>>>>"+reponse.getReponse());
 		QCM qcm = qcmRepository.getOne(qcm_id);
@@ -235,7 +236,9 @@ public class QuestionController {
 		if(qcm.getQuestions().size()>1) {
 			qcm.getQuestions().remove(question);
 			qcmRepository.save(qcm);
-			return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&qcm_id="+qcm.getId()+"&note_id="+note_id;
+			numero_qst++;
+			return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&qcm_id="
+					+qcm.getId()+"&note_id="+note_id+"&numero_qst="+numero_qst+"&total_qst="+total_qst;
 		}
 		qcmRepository.delete(qcm);
 		return "redirect:/qcms/resultatQcm?classe_id="+classe_id+"&matiere_id="+matiere_id+"&note_id="+note_id;

@@ -210,7 +210,6 @@ public class QCMController {
 		qcmRepository.save(qcm1);
 		Note note = new Note(0,eleveRepository.getOne(login),qcm1);
 		noteRepository.save(note);
-
 		QCM qcm2 = new QCM(qcm.getNom().concat('_'+login+'2'),qcm.getType(),qcm.getMode(),qcm.isTest(),
 				qcm.isPartage(),classe,formateur,matiere,qcm.getConsignes());
 		qcmRepository.save(qcm2);
@@ -220,7 +219,9 @@ public class QCMController {
 						classeRepository.getOne(classe_id),
 						matiereRepository.getOne(matiere_id)).get(0)));
 		qcmRepository.save(qcm2);
-		return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&note_id="+note.getId()+"&qcm_id="+qcm2.getId();
+		Integer total_qst = qcm2.getQuestions().size();
+		return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+
+				"&note_id="+note.getId()+"&qcm_id="+qcm2.getId()+"&total_qst="+total_qst;
 	}
 
 	@GetMapping("/resultatQcm")
