@@ -3,15 +3,7 @@ package ma.ac.emi.qcm.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class QCM {
@@ -26,6 +18,7 @@ public class QCM {
 	private Mode mode;
 	private boolean test;
 	private boolean partage;
+
 	@ManyToOne
 	@JoinColumn(name = "classe_id", nullable = false)
 	private Classe classe;
@@ -38,6 +31,7 @@ public class QCM {
 			@JoinColumn(name = "qcm_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "question_id", referencedColumnName = "id", nullable = false, updatable = false) })
 	private List<Question> questions = new ArrayList<Question>();
+
 	@ManyToOne
 	@JoinColumn(name = "matiere_id", nullable = false)
 	private Matiere matiere;
@@ -48,7 +42,20 @@ public class QCM {
 	}
 
 	public QCM(String nom, Type type, Mode mode, boolean test, boolean partage, Classe classe, Formateur formateur,
-			Matiere matiere) {
+			Matiere matiere, List<String> consignes) {
+		super();
+		this.nom = nom;
+		this.type = type;
+		this.mode = mode;
+		this.test = test;
+		this.partage = partage;
+		this.classe = classe;
+		this.formateur = formateur;
+		this.matiere = matiere;
+		this.consignes = consignes;
+	}
+	public QCM(String nom, Type type, Mode mode, boolean test, boolean partage, Classe classe, Formateur formateur,
+			   Matiere matiere) {
 		super();
 		this.nom = nom;
 		this.type = type;
@@ -140,11 +147,21 @@ public class QCM {
 		this.matiere = matiere;
 	}
 
+	public List<String> getConsignes() {
+		return consignes;
+	}
+
+	public void setConsignes(List<String> consignes) {
+		this.consignes = consignes;
+	}
+
 	@Override
 	public String toString() {
 		return "Qcm [id=" + id + ", nom=" + nom + ", type=" + type + ", mode=" + mode + ", test=" + test + ", partage="
 				+ partage + ", classe=" + classe + ", formateur=" + formateur + ", questions=" + questions
 				+ ", matiere=" + matiere + "]";
 	}
+
+
 
 }

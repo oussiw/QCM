@@ -1,5 +1,5 @@
 package ma.ac.emi.qcm.entities;
 
 public enum Mode {
-	VraixFaux, ChoixUnique, MultiChoix
+	Vraix_Faux, Choix_Unique, Multi_Choix
 }

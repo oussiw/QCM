@@ -26,6 +26,7 @@ public class Note {
 	@OneToMany
 	@JoinTable(name = "note_question")
 	private List<Question> questions = new ArrayList<Question>();
+
 	@OneToOne
 	private QCM qcm;
 

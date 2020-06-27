@@ -12,6 +12,7 @@ import ma.ac.emi.qcm.repository.*;
 @SpringBootApplication
 public class QcmApplication {
 
+
 	@Autowired
 	ThemeRepository themeRepo;
 	@Autowired
@@ -28,9 +29,11 @@ public class QcmApplication {
 	ClasseRepository classeRepo;
 	@Autowired
 	QuestionRepository questionRepo;
-
 	@Autowired
 	ReponseRepository reponseRepository;
+
+	@Autowired
+	EleveRepository eleveRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(QcmApplication.class, args);
@@ -41,7 +44,7 @@ public class QcmApplication {
 		return args -> {
 			Formateur formateur = new Formateur("ali", "alimalaoui3@gmail.com", "ali", "1234");
 			formateurRepository.save(formateur);
-			Formateur formateur1 = new Formateur("Oussama", "oussma@gmail.com", "oussama", "1234");
+			Formateur formateur1 = new Formateur("Oussama", "oussma@gmail.com", "oussiw", "1234");
 			formateurRepository.save(formateur1);
 
 			Formation formation = new Formation("ingénieurs");
@@ -70,41 +73,72 @@ public class QcmApplication {
 
 			Classe classe = new Classe("G INF", niveau2);
 			classeRepo.save(classe);
+			Classe classe1 = new Classe("G INF", niveau1);
+			classeRepo.save(classe1);
 
-			QCM qcm1 = new QCM("TEST 1", Type.Normale, Mode.VraixFaux, false, false, classe, formateur, matiere);
-			QCM qcm2 = new QCM("TEST 2", Type.Penalisant, Mode.VraixFaux, false, false, classe, formateur, matiere);
-			QCM qcm3 = new QCM("TP", Type.Normale, Mode.MultiChoix, false, false, classe, formateur1, matiere2);
+
+
+			classe.addFormateur(formateur);
+			classe.addFormateur(formateur1);
+
+//			formateur.addClass(classe);
+			formateur.addMatiere(matiere);
+			formateurRepository.save(formateur);
+
+			matiere.addFormateur(formateur);
+			matiereRepo.save(matiere);
+
+			Eleve eleve = new Eleve("oussama","oussamasiwane@student.emi.ac.ma", "oussama", "oussama",123456);
+			eleveRepository.save(eleve);
+			eleve.addClasse(classe);
+			eleve.addClasse(classe1);
+			classeRepo.save(classe);
+			classeRepo.save(classe1);
+			eleveRepository.save(eleve);
+			QCM qcm1 = new QCM("TEST 1", Type.Normale, Mode.Vraix_Faux, false, false, classe, formateur, matiere);
+			QCM qcm2 = new QCM("TEST 2", Type.Penalisant, Mode.Multi_Choix, false, false, classe, formateur, matiere);
+			QCM qcm3 = new QCM("TP", Type.Normale, Mode.Multi_Choix, false, false, classe, formateur1, matiere2);
 
 			qcmRepository.save(qcm1);
 			qcmRepository.save(qcm2);
 			qcmRepository.save(qcm3);
 
-			Question question1 = new Question("Definition de ORM", 3, Difficulte.Normale, false, false, theme,
+			Question question1 = new Question("Hibernate est un ORM", 3, Difficulte.Normale, false, false, theme,
 					formateur);
-			Question question2 = new Question("Definition d'un EntityManager", 3, Difficulte.Difficile, false, false,
+			Question question2 = new Question("Java autorise l'héritage multiple", 1, Difficulte.Difficile, false, false,
 					theme, formateur);
 			Question question3 = new Question("Definir Composite", 3, Difficulte.Normale, false, false, theme1,
 					formateur1);
+			Question question4 = new Question("Une classe abstraite peut etre instanciée", 2, Difficulte.Difficile, false, false,
+					theme, formateur);
 
 			question1.getQcms().add(qcm1);
 			question2.getQcms().add(qcm1);
+			question4.getQcms().add(qcm1);
 			question3.getQcms().add(qcm3);
 
 			questionRepo.save(question1);
 			questionRepo.save(question2);
+			questionRepo.save(question4);
 			questionRepo.save(question3);
 
 			qcm1.getQuestions().add(question1);
 			qcm1.getQuestions().add(question2);
+			qcm1.getQuestions().add(question4);
 			qcm3.getQuestions().add(question3);
 
 			qcmRepository.save(qcm1);
 			qcmRepository.save(qcm2);
 			qcmRepository.save(qcm3);
 
-			reponseRepository.save(new Reponse("The first question", true, question1));
-			reponseRepository.save(new Reponse("The second question", false, question1));
-			reponseRepository.save(new Reponse("The third question", true, question1));
+			reponseRepository.save(new Reponse("True", true, question1));
+			reponseRepository.save(new Reponse("False", false, question1));
+			reponseRepository.save(new Reponse("True", false, question2));
+			reponseRepository.save(new Reponse("False", true, question2));
+			reponseRepository.save(new Reponse("True", false, question4));
+			reponseRepository.save(new Reponse("False", true, question4));
+
+
 
 		};
 	}

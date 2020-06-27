@@ -3,10 +3,7 @@ package ma.ac.emi.qcm.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("ROLE_ELEVE")
@@ -14,24 +11,32 @@ public class Eleve extends Personne {
 
 	private int matricule;
 
-	@ManyToMany(mappedBy = "eleves")
-	private List<Classe> classes = new ArrayList<Classe>();
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "classes_eleves", joinColumns = {
+			@JoinColumn(name = "eleve_id", referencedColumnName = "login", nullable = false, updatable = false) }, inverseJoinColumns = {
+			@JoinColumn(name = "classe_id", referencedColumnName = "id", nullable = false, updatable = false) })
+	private List<Classe> classes ;
+
+
 	@OneToMany(mappedBy = "eleve")
 	private List<Note> notes = new ArrayList<Note>();
 
 	public Eleve() {
 		super();
+		classes= new ArrayList<Classe>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Eleve(String nom, String email, String login, String password) {
 		super(nom, email, login, password);
+		classes= new ArrayList<Classe>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Eleve(String nom, String email, String login, String password, int matricule) {
 		super(nom, email, login, password);
 		this.matricule = matricule;
+		classes= new ArrayList<Classe>();
 	}
 
 	public List<Classe> getClasses() {
@@ -63,6 +68,10 @@ public class Eleve extends Personne {
 
 	public void setNotes(List<Note> notes) {
 		this.notes = notes;
+	}
+
+	public void addClasse(Classe classe){
+		classes.add(classe);
 	}
 
 }

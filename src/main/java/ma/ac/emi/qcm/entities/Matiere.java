@@ -20,8 +20,9 @@ public class Matiere {
 	private Long id;
 	private String nom;
 	@ManyToMany(mappedBy = "matieres")
-	private List<Formateur> formateurs;
-	@ManyToOne(fetch = FetchType.LAZY)
+	private List<Formateur> formateurs = new ArrayList<Formateur>();
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "niveau_id", nullable = false)
 	private Niveau niveau;
 	@OneToMany(mappedBy = "matiere")
@@ -92,6 +93,10 @@ public class Matiere {
 	public String toString() {
 		return "Matiere [id=" + id + ", nom=" + nom + ", formateurs=" + formateurs + ", niveau=" + niveau + ", themes="
 				+ themes + ", examens=" + examens + "]";
+	}
+
+	public void addFormateur(Formateur formateur){
+		formateurs.add(formateur);
 	}
 
 }

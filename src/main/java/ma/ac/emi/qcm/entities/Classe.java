@@ -24,12 +24,13 @@ public class Classe {
 	@ManyToMany
 	@JoinTable(name = "classes_eleves", joinColumns = {
 			@JoinColumn(name = "classe_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "eleve_id", referencedColumnName = "login", nullable = false, updatable = false) })
+			@JoinColumn(name = "eleve_id", referencedColumnName = "login", nullable = false, updatable = false) })
 	private List<Eleve> eleves = new ArrayList<Eleve>();
+
 	@ManyToMany
-	@JoinTable(name = "classes_formateurs", joinColumns = {
-			@JoinColumn(name = "classe_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "formateur_id", referencedColumnName = "login", nullable = false, updatable = false) })
+	@JoinTable(name = "classes_formateurs",
+			joinColumns = {@JoinColumn(name = "classe_id", referencedColumnName = "id", nullable = false, updatable = false) },
+			inverseJoinColumns = {@JoinColumn(name = "formateur_id", referencedColumnName = "login", nullable = false, updatable = false) })
 	private List<Formateur> formateurs = new ArrayList<Formateur>();
 	@ManyToOne
 	private Niveau niveau;
@@ -93,6 +94,10 @@ public class Classe {
 
 	public void setQcms(List<QCM> qcms) {
 		this.qcms = qcms;
+	}
+
+	public void addFormateur(Formateur formateur){
+		formateurs.add(formateur);
 	}
 
 }

@@ -16,6 +16,10 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
 
+
+	@Autowired
+	EleveRepository eleveRepository;
+
 	@Autowired
 	QuestionRepository questionRepo;
 	@Autowired
@@ -30,6 +34,11 @@ public class QuestionController {
 	MatiereRepository matiereRepo;
 	@Autowired
 	QCMRepository qcmRepository;
+	@Autowired
+	ClasseRepository classeRepo;
+
+	@Autowired
+	NoteRepository noteRepository;
 
 	@GetMapping("/")
 	public String getQuestions(Model model, @RequestParam(name = "theme_id", defaultValue = "-1") Long themeid,
@@ -151,6 +160,66 @@ public class QuestionController {
 		formateur.getQuestions().remove(question);
 		questionRepo.delete(question);
 		return "redirect:/questions/list?theme_id=" + theme.getId();
+	}
+
+	@GetMapping("/afficherQu")
+	public String afficherQu(Model model,
+							 @RequestParam(name = "qcm_id") Long qcm_id,
+							 @RequestParam(name = "note_id")  Long note_id,
+							 @RequestParam(name = "classe_id") Long classe_id,
+							 @RequestParam(name = "matiere_id") Long matiere_id,
+							 @RequestParam(name = "question_idex",defaultValue = "0",required = false)Integer index){
+
+		Question question = questionRepo.findByThemeandAndFormateur(
+				themeRepo.getThemeByMatiere(matiereRepo.getOne(matiere_id)).get(0),
+				formateurRepo.findFormateurByClassAndMatiere(
+						classeRepo.getOne(classe_id),
+						matiereRepo.getOne(matiere_id)).get(0)).get(index);
+		Reponse reponse = new Reponse();
+		reponse.setQuestion(question);
+		QCM qcm = qcmRepository.getOne(qcm_id);
+		System.out.println(">>>>>>>>>>>>>>"+qcm.getNom());
+		Matiere matiere = matiereRepo.getOne(matiere_id);
+		Classe classe = classeRepo.getOne(classe_id);
+		model.addAttribute("question",question);
+		model.addAttribute("reponse",reponse);
+		model.addAttribute("note_id",note_id);
+		model.addAttribute("matiereA", matiere);
+		model.addAttribute("classeA", classe);
+		model.addAttribute("index",index);
+		model.addAttribute("qcm",qcm);
+		return "questions/question";
+	}
+
+	@PostMapping("/traiterQuestion")
+	public String traiterQuestion(@ModelAttribute("Reponse")Reponse reponse,
+								  @RequestParam(name = "qcm_id") Long qcm_id,
+								  @RequestParam(name = "note_id") Long note_id,
+								  @RequestParam(name = "classe_id") Long classe_id,
+								  @RequestParam(name = "matiere_id") Long matiere_id,
+								  @RequestParam(name = "question_idex",defaultValue = "0")Integer index){
+
+		System.out.println(">>>>>>>>>>>>>>"+reponse.getReponse());
+		QCM qcm = qcmRepository.getOne(qcm_id);
+		Question question = qcm.getQuestions().get(index);
+		for(Reponse rep:question.getReponses()){
+//			Note note = noteRepository.getOne(note_id);
+//			note.setNote(note.getNote()+question.getBareme());
+//			noteRepository.save(note);
+//			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+reponse.getReponse());
+//			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+rep.getReponse());
+			if(reponse.getReponse().equals(rep.getReponse()) && rep.isCorrecte()){
+				Note note = noteRepository.getOne(note_id);
+				note.setNote(note.getNote()+question.getBareme());
+				noteRepository.save(note);
+				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+note.getNote());
+			}
+		}
+		if(index < qcm.getQuestions().size()-1) {
+			index++;
+			return "redirect:/questions/afficherQu?classe_id="+classe_id+"&matiere_id="+matiere_id+"&qcm_id="+qcm.getId()+"&note_id="+note_id+"&question_idex="+index;
+		}
+		return "redirect:/qcms/resultatQcm?classe_id="+classe_id+"&matiere_id="+matiere_id+"&note_id="+note_id;
 	}
 
 }

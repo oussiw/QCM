@@ -15,7 +15,10 @@ import javax.persistence.OneToMany;
 
 public class Formateur extends Personne {
 
-	@ManyToMany(mappedBy = "formateurs")
+	@ManyToMany
+	@JoinTable(name = "classes_formateurs",
+			joinColumns = {@JoinColumn(name = "formateur_id", referencedColumnName = "login", nullable = false, updatable = false) },
+			inverseJoinColumns = {@JoinColumn(name = "classe_id", referencedColumnName = "id", nullable = false, updatable = false) })
 	private List<Classe> classes = new ArrayList<Classe>();
 
 	@OneToMany(mappedBy = "formateur")
@@ -76,4 +79,11 @@ public class Formateur extends Personne {
 		return "Formateur [ toString()=" + super.toString() + "]";
 	}
 
+	public void addClass(Classe classe){
+		classes.add(classe);
+	}
+
+	public void addMatiere(Matiere matiere){
+		matieres.add(matiere);
+	}
 }
