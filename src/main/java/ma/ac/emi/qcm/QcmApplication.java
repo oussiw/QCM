@@ -136,8 +136,6 @@ public class QcmApplication {
 			reponseRepository.save(new Reponse("True", false, question4));
 			reponseRepository.save(new Reponse("False", true, question4));
 
-
-
 		};
 	}
 
