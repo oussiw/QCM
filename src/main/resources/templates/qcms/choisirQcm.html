@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'qcm')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content">
+    <label th:if="${eleve}" th:text="'Matricule: '+${eleve.matricule}"></label>
+    <form th:action="@{/qcms/getClasse}" method="post" th:object="${classeA}">
+        <label >Choisir une classe:</label><br>
+        <select name="classe" class="form-control" th:field="*{id}">
+            <option th:each="classe : ${eleve.classes}" th:value="${classe.id}" th:text="${classe.nom}+' / '+${classe.niveau.nom}"
+                    th:selected="${classe}==${classeA}"></option>
+        </select><br>
+        <button type="submit" class="btn btn-default">Afficher la liste des matières</button>
+    </form><br>
+    <form th:action="@{/qcms/getMatiere(classe_id=${classeA.id})}" method="post" th:object="${matiereA}" th:if="${classeA.id}">
+        <hr>
+        <label >Choisir une matiere:</label><br>
+        <select name="matiere" class="form-control" th:field="*{id}">
+            <option th:each="matiere : ${classeA.niveau.matieres}" th:value="${matiere.id}" th:text="${matiere.nom}"
+                    th:selected="${matiere}==${matiereA}"></option>
+        </select><br>
+        <button type="submit" class="btn btn-default">Choisir matière</button>
+    </form><br>
+    <form th:action="@{/qcms/genererQcm(eleve_id=${eleve.login},matiere_id=${matiereA.id},classe_id=${classeA.id})}" method="post" th:object="${QCM}" th:if="${classeA.id != null and matiereA.id != null}">
+        <hr>
+        <label th:text="'Vous avez choisi la classe: '+*{classe.nom}+' / '+*{classe.niveau.nom}"></label><br>
+        <label th:text="'Vous avez choisi la matiere: '+*{matiere.nom}"></label><br>
+        <br>
+        <label >Select a mode</label>
+        <select name="mode" class="form-control" th:field="*{mode}">
+            <option th:each="mode : ${modes}" th:value="${mode}" th:text="${mode.name()}"
+                    th:selected="${mode}==*{mode}"></option>
+        </select><br>
+        <input type="radio" th:field="*{test}" value="true" th:value="true" checked="checked">
+        <label>Passer un test</label>
+        <input type="radio" th:field="*{test}" value="false" th:value="false">
+        <label>S'entrainer</label>
+        <br><br>
+        <button type="submit" class="btn btn-default">Générer</button>
+    </form>
+    </div>
+</body>
+</html>

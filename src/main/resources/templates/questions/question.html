@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'qcm')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content">
+
+    <form
+            th:action="@{/questions/traiterQuestion(note_id=${note_id}, matiere_id=${matiereA.id},
+            classe_id=${classeA.id},question_idex=${index},qcm_id=${qcm.id})}"
+            method="post"
+            th:object="${reponse}">
+        <div>
+            <hr>
+            <h3>Questions: </h3>
+            <label th:text="${question.enonce}"></label>
+            <ol>
+                <li th:each="response : ${question.reponses}">
+                    <input type="radio" th:value="${response.reponse}" th:name="reponse" >
+                    <label th:text="${response.reponse}"></label><br>
+                </li>
+            </ol>
+        </div>
+        <button type="submit" class="btn btn-default">Envoyer</button>
+    </form>
+
+</div>
+</body>
+</html>

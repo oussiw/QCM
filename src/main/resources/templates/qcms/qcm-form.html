@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'qcm')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content">
+    <form th:if="${NOTE==null}" th:action="@{/qcms/commencerQCM(eleve_id=${eleve.login},matiere_id=${matiereA.id},classe_id=${classeA.id})}" method="post" th:object="${QCM}">
+        <input type="text" th:field="*{id}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{nom}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{test}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{type}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{mode}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{consignes}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <h3 th:if="*{isTest()==true}">Ceci est un test</h3>
+        <h3 th:if="*{isTest()==false}">Ceci est un entrainement</h3>
+        <label th:text="'Voici un qcm dont le mode est: '+*{mode}"></label><br>
+        <label th:text="'Matière: '+*{matiere.nom}"></label><br>
+        <label th:text="'Ce qcm est du type: '+*{type}"></label><br>
+        <div th:if="*{consignes == null}">
+            <label>Consignes: </label><br>
+            <ul>
+                <li th:each="consigne : *{consignes}" th:text="${consigne}"></li>
+            </ul>
+        </div>
+        <button type="submit" class="btn btn-default">Commencer</button>
+    </form>
+
+    <form th:if="${NOTE}" th:action="@{/qcms/}" method="get" th:object="${QCM}">
+        <input type="text" th:field="*{id}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{nom}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{test}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{type}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{mode}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <input type="text" th:field="*{consignes}" placeholder="id" class="form-control mb-4 col-4" style="display: none">
+        <h3 th:if="*{isTest()==true}">Ceci est un test</h3>
+        <h3 th:if="*{isTest()==false}">Ceci est un entrainement</h3>
+        <label th:text="'Voici un qcm dont le mode est: '+*{mode}"></label><br>
+        <label th:text="'Matière : '+*{matiere.nom}"></label><br>
+        <label th:text="'Ce qcm est du type: '+*{type}"></label><br>
+        <div th:if="*{consignes == null}">
+            <label>Consignes: </label><br>
+            <ul>
+                <li th:each="consigne : *{consignes}" th:text="${consigne}"></li>
+            </ul>
+        </div>
+        <label th:text="'Votre score: '+${NOTE.note}+' / '+${ScoreMax}"></label><br>
+        <button type="submit" class="btn btn-default">Terminer</button>
+    </form>
+
+</div>
+</body>
+</html>
