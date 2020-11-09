@@ -12,7 +12,6 @@ import ma.ac.emi.qcm.repository.*;
 @SpringBootApplication
 public class QcmApplication {
 
-
 	@Autowired
 	ThemeRepository themeRepo;
 	@Autowired
